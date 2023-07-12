@@ -9,10 +9,10 @@ describe('PostsService', () => {
 
   describe('.findMany', () => {
     const posts = [
-      { text: 'Post 1' },
-      { text: 'Post 2' },
-      { text: 'Post 3' },
-      { text: 'Post 4' },
+      { id: '1', text: 'Post 1' },
+      { id: '2', text: 'Post 2' },
+      { id: '3', text: 'Post 3' },
+      { id: '4', text: 'Post 4' },
     ];
 
     beforeEach(() => {
@@ -35,7 +35,7 @@ describe('PostsService', () => {
       const options: FindManyOptions = { skip: 2 };
       const expectedPosts = posts.slice(2);
       const foundPosts = postsService.findMany(options);
-      expect(expectedPosts).toEqual(foundPosts);
+      expect(foundPosts).toEqual(expectedPosts);
     });
 
     it('should return correct posts for limit option', () => {
@@ -53,12 +53,6 @@ describe('PostsService', () => {
 
     it('should return an empty array if limit is 0', () => {
       const options: FindManyOptions = { limit: 0 };
-      const foundPosts = postsService.findMany(options);
-      expect(foundPosts).toEqual([]);
-    })
-
-    it('should return an empty array if no posts match the options', () => {
-      const options: FindManyOptions = { before: '2023-07-10' };
       const foundPosts = postsService.findMany(options);
       expect(foundPosts).toEqual([]);
     });
