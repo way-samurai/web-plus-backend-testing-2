@@ -1,4 +1,4 @@
-import { PostsService } from './posts.service';
+import { FindManyOptions, PostsService } from './posts.service';
 
 describe('PostsService', () => {
   let postsService: PostsService;
@@ -9,10 +9,10 @@ describe('PostsService', () => {
 
   describe('.findMany', () => {
     const posts = [
-      {text: 'Post 1'},
-      {text: 'Post 2'},
-      {text: 'Post 3'},
-      {text: 'Post 4'},
+      { text: 'Post 1' },
+      { text: 'Post 2' },
+      { text: 'Post 3' },
+      { text: 'Post 4' },
     ];
 
     beforeEach(() => {
@@ -20,13 +20,47 @@ describe('PostsService', () => {
     });
 
     it('should return all posts if called without options', () => {
-      // реализуйте тест-кейс
+      const foundPosts = postsService.findMany();
+      expect(foundPosts).toEqual(posts);
     });
 
     it('should return correct posts for skip and limit options', () => {
-      // реализуйте тест-кейс
+      const options: FindManyOptions = { skip: 1, limit: 2 };
+      const expectedPosts = posts.slice(1, 3);
+      const foundPosts = postsService.findMany(options);
+      expect(foundPosts).toEqual(expectedPosts);
     });
 
-    // реализуйте недостающие тест-кейсы
+    it('should return correct posts for skip option', () => {
+      const options: FindManyOptions = { skip: 2 };
+      const expectedPosts = posts.slice(2);
+      const foundPosts = postsService.findMany(options);
+      expect(expectedPosts).toEqual(foundPosts);
+    });
+
+    it('should return correct posts for limit option', () => {
+      const options: FindManyOptions = { limit: 2 };
+      const expectedPosts = posts.slice(0, 2);
+      const foundPosts = postsService.findMany(options);
+      expect(foundPosts).toEqual(expectedPosts);
+    });
+
+    it('should return an empty array if skip exceeds the number of posts', () => {
+      const options: FindManyOptions = { skip: 10 };
+      const foundPosts = postsService.findMany(options);
+      expect(foundPosts).toEqual([]);
+    });
+
+    it('should return an empty array if limit is 0', () => {
+      const options: FindManyOptions = { limit: 0 };
+      const foundPosts = postsService.findMany(options);
+      expect(foundPosts).toEqual([]);
+    })
+
+    it('should return an empty array if no posts match the options', () => {
+      const options: FindManyOptions = { before: '2023-07-10' };
+      const foundPosts = postsService.findMany(options);
+      expect(foundPosts).toEqual([]);
+    });
   });
 });
